@@ -45,6 +45,8 @@ systemctl status jenkins
 https://developerinsider.co/install-sonarqube-on-ubuntu/
 
 
+# Run the java application directly from Dockerfile #
+
 
 1.) Write Dockerfile for a Java code/application which is performing below task -
 a.) Pulling the code and other dependent files from GIT 
@@ -76,3 +78,6 @@ example/exact command : docker build -t myjavaapp:v1.0 .
 3.) Using the above docker image as mujavaapp, run this java application into a docker container - 
 
 example/exact command : docker run -d --name randomname -p 8082:8082 myjavaapp:v1.0
+
+
+
