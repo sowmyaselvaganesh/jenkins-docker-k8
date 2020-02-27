@@ -43,3 +43,36 @@ systemctl status jenkins
  # Install Sonar on Ubuntu 16.04 #
 ```
 https://developerinsider.co/install-sonarqube-on-ubuntu/
+
+
+
+1.) Write Dockerfile for a Java code/application which is performing below task -
+a.) Pulling the code and other dependent files from GIT 
+b.) Compiling through maven 
+c.) Running the Java application
+
+****Starting of a Dockerfile**** 
+FROM alpine/git as clone
+WORKDIR /app
+RUN git clone https://github.com/mhali922/jenkins-pipeline2.git
+
+FROM maven:3.5-jdk-8-alpine as build
+WORKDIR /app
+COPY --from=clone /app/jenkins-pipeline2 /app
+RUN mvn install
+
+FROM openjdk:8-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/gs-spring-boot-docker-0.1.0.jar /app
+ENTRYPOINT ["sh", "-c"]
+CMD ["java -jar gs-spring-boot-docker-0.1.0.jar"]
+EXPOSE 8082
+****End of a Dockerfile****
+
+2.) Using above Dockerfile, create an image of the java application using below command - 
+Syntax : docker build -t :<Version, It could also be your choice> 
+example/exact command : docker build -t myjavaapp:v1.0 .
+
+3.) Using the above docker image as mujavaapp, run this java application into a docker container - 
+
+example/exact command : docker run -d --name randomname -p 8082:8082 myjavaapp:v1.0
