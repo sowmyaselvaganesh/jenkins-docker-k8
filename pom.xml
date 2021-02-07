@@ -47,16 +47,16 @@
             </plugin>
             <!-- end::plugin[] -->
 
-  <!--          <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>unpack</id>
+<!--                    <id>unpack</id>  -->
                         <phase>package</phase>
-                        <goals>
+<!--                     <goals>
                             <goal>unpack</goal>
-                        </goals>
+                        </goals>  -->
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
