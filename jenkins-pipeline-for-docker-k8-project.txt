@@ -1,0 +1,36 @@
+node{
+    
+    stage("clone code from git hub"){
+        git credentialsId: 'GIT_CREDENTIALS', url: 'https://github.com/mhali922/jenkins-docker-k8.git'
+    }
+    
+    stage("Maven clean build"){
+        def mavenHome = tool name:"maven", type: "maven"
+        def mavenCMD = "${mavenHome}/bin/mvn clean package"
+        sh "${mavenCMD} clean package"
+    }
+    stage("Build Image"){
+        sh "docker build -t java:v1.0 ."
+       
+            }
+    stage("push to docker hub"){
+        sh "cat ~/my_password.txt | docker login --username mhali --password-stdin"
+        sh "docker tag java:1.0 mhali/java_app:latest"
+        sh "docker push mhali/java_app:latest"
+    }
+    
+    /**
+    stage("Deploy docker image to k8 cluster"){
+        kubernetesDeploy(
+            configs: 'm_hello_world.yml',
+            kubeconfigId: 'KUBERNETES_CLUSTER_CONFIG',
+            enableConfigSubstitution: true
+            )
+    }
+    **/
+    
+    stage("Deploy to k8 cluster"){
+        sh 'kubectl apply -f hello-world.yml'
+    }
+        
+}
