@@ -10,7 +10,6 @@ spec:
       targetPort: 8080
   selector:
     app: java-app
-	
 ---
 # Replication Controller for javaApp
 apiVersion: v1
