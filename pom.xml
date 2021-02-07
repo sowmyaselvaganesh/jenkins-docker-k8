@@ -52,11 +52,11 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>unpack</id> 
+<!--                    <id>unpack</id>
                         <phase>package</phase>
                         <goals>
                             <goal>unpack</goal>
-                        </goals> 
+                        </goals> -->
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
@@ -71,7 +71,7 @@
             </plugin>
         </plugins>
     </build>
-  -->
+
 
     <dependencies>
         <dependency>
