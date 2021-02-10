@@ -10,27 +10,29 @@ node{
         sh "${mavenCMD} clean package"
     }
     stage("Build Image"){
-        sh "docker build -t java:v1.0 ."
+        sh "docker build -t mhali/java_app ."
        
             }
     stage("push to docker hub"){
         sh "cat ~/my_password.txt | docker login --username mhali --password-stdin"
-        sh "docker tag java:1.0 mhali/java_app:latest"
-        sh "docker push mhali/java_app:latest"
+        sh "docker tag mhali/java_app mhali/java_app "
+        sh "docker push mhali/java_app"
     }
     
     /**
     stage("Deploy docker image to k8 cluster"){
         kubernetesDeploy(
-            configs: 'm_hello_world.yml',
+            configs: 'java-app.yml',
             kubeconfigId: 'KUBERNETES_CLUSTER_CONFIG',
             enableConfigSubstitution: true
             )
     }
     **/
     
+   
     stage("Deploy to k8 cluster"){
         sh 'kubectl apply -f java-app.yml'
     }
+   
         
 }
