@@ -1,0 +1,71 @@
+Common command to run on both MASTER AND SLAVE
+	
+1
+sudo apt-get update -y
+2
+sudo apt-get install -y apt-transport-https
+3
+sudo su - 
+4  
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+5
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+6  
+apt-get update -y
+7
+swapoff -a
+8
+sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+9
+modprobe br_netfilter
+10
+sysctl -p
+11
+sudo sysctl net.bridge.bridge-nf-call-iptables=1
+12
+apt install docker.io -y
+13
+usermod -aG docker ubuntu
+14
+systemctl restart docker
+15
+systemctl enable docker.service
+16
+apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+17
+systemctl daemon-reload
+18
+systemctl start kubelet
+19
+systemctl enable kubelet.service
+
+
+-ONLY TO MASTER MACHINE-
+1
+** Execute below command as a ROOT user
+   kubeadm init
+   
+** exit as a ROOT user and execute below commands as a normal user but wait first run a cni then jump to Step 2 -
+2
+-To start using your cluster, you need to run the following as a regular user:
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+3
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+4
+
+** Below command is to get token to connect SLAVE machines
+   kubeadm token create --print-join-command
+   
+-TILL HERE ON MASTER MACHINE-
+
+-RUN the below command on SLAVE MACHINE
+
+Sample command - sudo kubeadm join 172.31.71.30:6443 --token 116177.21idojusjd6sth6i     --discovery-token-ca-cert-hash sha256:bf91c86a08abdd04317677ca4a3937fd3cc4e971a03ccdc0ab93fa76d5672136
+
